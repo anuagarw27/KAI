@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KAI Data Center Builder — Practitioner's Guide</title>
+<style>
+  :root{
+    --bg:#ffffff; --bg-alt:#f6f7f9; --bg-sunk:#eef0f4;
+    --fg:#14171c; --fg-mut:#5a6270; --fg-faint:#868e9c;
+    --line:#dfe3ea; --line-strong:#c6ccd8;
+    --accent:#c8102e;          /* Keysight red */
+    --accent-soft:#fdeaed;
+    --info:#1f6feb; --info-soft:#e8f0fe;
+    --warn:#a8630a; --warn-soft:#fdf3e2;
+    --ok:#1a7f4b; --ok-soft:#e7f6ed;
+    --code-bg:#f2f4f8;
+    --radius:10px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0f1216; --bg-alt:#161a20; --bg-sunk:#1c222a;
+    --fg:#e7eaef; --fg-mut:#a3acba; --fg-faint:#78818f;
+    --line:#262d37; --line-strong:#3a4350;
+    --accent:#ff5a6e; --accent-soft:#2a151a;
+    --info:#6ea8ff; --info-soft:#14203a;
+    --warn:#e3a94a; --warn-soft:#2a2113;
+    --ok:#5ed394; --ok-soft:#10251a;
+    --code-bg:#161b22;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:1.5rem}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:var(--sans); font-size:16px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--info); text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- layout ---------- */
+  .wrap{display:grid; grid-template-columns:274px minmax(0,1fr); max-width:1280px; margin:0 auto; gap:0}
+  nav.toc{
+    position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+    border-right:1px solid var(--line); padding:1.6rem 1.1rem 3rem; background:var(--bg-alt);
+  }
+  main{padding:2.2rem 2.6rem 6rem; min-width:0}
+  @media (max-width:900px){
+    .wrap{grid-template-columns:1fr}
+    nav.toc{position:static; height:auto; border-right:0; border-bottom:1px solid var(--line)}
+    main{padding:1.4rem 1.1rem 4rem}
+  }
+
+  /* ---------- toc ---------- */
+  .brand{display:flex; align-items:center; gap:.6rem; margin-bottom:1.1rem}
+  .brand .mark{
+    width:30px;height:30px;border-radius:7px;background:var(--accent);
+    display:grid;place-items:center;color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.02em;flex:0 0 auto
+  }
+  .brand .t{font-weight:650; font-size:.95rem; line-height:1.25}
+  .brand .s{font-size:.72rem; color:var(--fg-faint); font-weight:400}
+  nav.toc ol{list-style:none; margin:0; padding:0; counter-reset:sec}
+  nav.toc li{counter-increment:sec}
+  nav.toc a{
+    display:block; padding:.34rem .55rem; border-radius:6px; font-size:.855rem;
+    color:var(--fg-mut); border-left:2px solid transparent;
+  }
+  nav.toc a:hover{background:var(--bg-sunk); color:var(--fg); text-decoration:none}
+  nav.toc a.active{color:var(--fg); background:var(--bg-sunk); border-left-color:var(--accent); font-weight:600}
+  nav.toc a::before{content:counter(sec) ". "; color:var(--fg-faint); font-variant-numeric:tabular-nums}
+  .toc-foot{margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--line); font-size:.76rem; color:var(--fg-faint)}
+  button.theme{
+    margin-top:.9rem; width:100%; cursor:pointer; font:inherit; font-size:.8rem;
+    background:var(--bg); color:var(--fg-mut); border:1px solid var(--line-strong);
+    border-radius:7px; padding:.4rem .6rem;
+  }
+  button.theme:hover{color:var(--fg); border-color:var(--fg-faint)}
+
+  /* ---------- typography ---------- */
+  h1{font-size:2.05rem; line-height:1.2; margin:.2rem 0 .5rem; letter-spacing:-.02em}
+  h2{
+    font-size:1.42rem; margin:3rem 0 .9rem; padding-bottom:.4rem;
+    border-bottom:1px solid var(--line); letter-spacing:-.012em; scroll-margin-top:1rem;
+  }
+  h2 .num{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:.45rem}
+  h3{font-size:1.06rem; margin:1.8rem 0 .5rem; letter-spacing:-.005em}
+  h4{font-size:.94rem; margin:1.2rem 0 .35rem; color:var(--fg-mut); text-transform:uppercase; letter-spacing:.06em}
+  p{margin:.7rem 0}
+  ul,ol{margin:.6rem 0; padding-left:1.35rem}
+  li{margin:.3rem 0}
+  .lede{font-size:1.06rem; color:var(--fg-mut); max-width:68ch}
+  .meta{display:flex; flex-wrap:wrap; gap:.5rem; margin:1rem 0 0}
+  .pill{
+    font-size:.74rem; padding:.2rem .6rem; border-radius:999px;
+    background:var(--bg-sunk); color:var(--fg-mut); border:1px solid var(--line)
+  }
+
+  /* ---------- blocks ---------- */
+  code{font-family:var(--mono); font-size:.86em; background:var(--code-bg); padding:.12em .38em; border-radius:4px}
+  pre{
+    background:var(--code-bg); border:1px solid var(--line); border-radius:var(--radius);
+    padding:.9rem 1rem; overflow-x:auto; margin:.8rem 0; font-size:.85rem; line-height:1.55;
+  }
+  pre code{background:none; padding:0; font-size:inherit}
+  .cmt{color:var(--fg-faint)}
+  table{border-collapse:collapse; width:100%; margin:1rem 0; font-size:.9rem; display:block; overflow-x:auto}
+  th,td{border:1px solid var(--line); padding:.52rem .7rem; text-align:left; vertical-align:top}
+  th{background:var(--bg-sunk); font-weight:620; white-space:nowrap}
+  tbody tr:nth-child(even){background:var(--bg-alt)}
+
+  .note{
+    border:1px solid var(--line); border-left:3px solid var(--info); background:var(--info-soft);
+    border-radius:var(--radius); padding:.8rem 1rem; margin:1.1rem 0; font-size:.92rem;
+  }
+  .note.warn{border-left-color:var(--warn); background:var(--warn-soft)}
+  .note.ok{border-left-color:var(--ok); background:var(--ok-soft)}
+  .note.stop{border-left-color:var(--accent); background:var(--accent-soft)}
+  .note b{display:block; margin-bottom:.15rem; font-size:.8rem; text-transform:uppercase; letter-spacing:.05em}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:.85rem; margin:1.1rem 0}
+  .card{border:1px solid var(--line); border-radius:var(--radius); padding:.85rem .95rem; background:var(--bg-alt)}
+  .card h5{margin:0 0 .3rem; font-size:.92rem}
+  .card p{margin:0; font-size:.86rem; color:var(--fg-mut)}
+
+  .steps{counter-reset:step; list-style:none; padding-left:0; margin:1rem 0}
+  .steps > li{
+    counter-increment:step; position:relative; padding-left:2.4rem; margin:1.1rem 0;
+  }
+  .steps > li::before{
+    content:counter(step); position:absolute; left:0; top:.05rem;
+    width:1.65rem; height:1.65rem; border-radius:50%; background:var(--accent); color:#fff;
+    display:grid; place-items:center; font-size:.82rem; font-weight:700;
+  }
+  .steps > li > strong{display:block; margin-bottom:.15rem}
+
+  figure{margin:1.4rem 0; text-align:center}
+  figcaption{font-size:.8rem; color:var(--fg-faint); margin-top:.5rem}
+  svg{max-width:100%; height:auto}
+
+  dl.gloss{display:grid; grid-template-columns:max-content 1fr; gap:.45rem 1.1rem; margin:1rem 0; font-size:.92rem}
+  dl.gloss dt{font-weight:650; font-family:var(--mono); font-size:.86rem; color:var(--fg)}
+  dl.gloss dd{margin:0; color:var(--fg-mut)}
+  @media (max-width:640px){ dl.gloss{grid-template-columns:1fr; gap:.1rem 0} dl.gloss dd{margin-bottom:.6rem} }
+
+  hr{border:0; border-top:1px solid var(--line); margin:2.4rem 0}
+  footer{margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--line); font-size:.82rem; color:var(--fg-faint)}
+
+  @media print{
+    nav.toc{display:none} .wrap{display:block} main{padding:0}
+    h2{break-after:avoid} pre,table,.note,figure{break-inside:avoid}
+    a{color:inherit}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="toc" aria-label="Contents">
+  <div class="brand">
+    <div class="mark">KAI</div>
+    <div>
+      <div class="t">Data Center Builder</div>
+      <div class="s">Practitioner's Guide</div>
+    </div>
+  </div>
+  <ol>
+    <li><a href="#overview">What it is</a></li>
+    <li><a href="#concepts">Core concepts</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#prereqs">Prerequisites</a></li>
+    <li><a href="#quickstart">Quick start</a></li>
+    <li><a href="#fabric">Modeling the fabric</a></li>
+    <li><a href="#workload">Defining a workload</a></li>
+    <li><a href="#run">Running an experiment</a></li>
+    <li><a href="#results">Reading the results</a></li>
+    <li><a href="#playbook">Tuning playbook</a></li>
+    <li><a href="#automation">Automation &amp; CI</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+    <li><a href="#next">Next steps</a></li>
+  </ol>
+  <button class="theme" id="themeBtn" type="button">◐ Toggle theme</button>
+  <div class="toc-foot">
+    Single-file HTML · works offline<br>Print to PDF with Ctrl/Cmd&nbsp;+&nbsp;P
+  </div>
+</nav>
+
+<main>
+
+<h1>KAI Data Center Builder</h1>
+<p class="lede">A practitioner's guide to emulating AI training workloads over a real network fabric — so you can size, tune, and de-risk an AI data center before the GPUs arrive.</p>
+<div class="meta">
+  <span class="pill">Audience: network &amp; AI infrastructure engineers</span>
+  <span class="pill">Level: intermediate</span>
+  <span class="pill">Read time ≈ 20 min</span>
+</div>
+
+<div class="note stop">
+  <b>About this document</b>
+  This guide was rebuilt from scratch in the repository because the original
+  <code>KAI_Data_Center_Builder_Guide.html</code> lives on a local workstation and is not reachable from this
+  environment. Structure, concepts, and workflow are generic and vendor-accurate at the concept level; anything
+  environment-specific — licence servers, appliance addresses, exact CLI/API syntax, supported version matrix —
+  is marked <code>&lt;placeholder&gt;</code> and must be reconciled against your release's official documentation
+  before circulating.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="overview"><span class="num">1.</span>What it is</h2>
+
+<p>An AI training cluster spends a surprising share of every training step <em>not</em> computing. Between
+back-propagation passes, thousands of accelerators must exchange gradients through collective operations. When the
+fabric under them is misconfigured — poor load balancing, a congestion-control setting that reacts too late, an
+unlucky rail assignment — the slowest flow sets the pace for the entire job. That shows up as inflated
+<strong>job completion time (JCT)</strong> and idle, very expensive silicon.</p>
+
+<p><strong>KAI Data Center Builder</strong> addresses the chicken-and-egg problem in validating that fabric: you
+cannot tune a network for AI traffic without the AI traffic, and you cannot generate realistic AI traffic without a
+GPU cluster you have not bought yet. It <em>emulates</em> the accelerator side of the cluster — the collective
+communication patterns and the compute gaps between them — and drives that traffic across <strong>real switches,
+real cables, and real NICs</strong> at line rate.</p>
+
+<div class="cards">
+  <div class="card"><h5>Emulate, don't simulate</h5><p>Traffic crosses the device under test physically, so ASIC buffering, ECMP hashing, and congestion control behave as they will in production.</p></div>
+  <div class="card"><h5>Scale without GPUs</h5><p>A modest appliance footprint stands in for a large accelerator population, letting you rehearse designs long before hardware lands.</p></div>
+  <div class="card"><h5>Change one variable</h5><p>Deterministic, repeatable runs make A/B comparisons meaningful: same workload, one config delta, measurable JCT difference.</p></div>
+  <div class="card"><h5>Speak the AI vocabulary</h5><p>Experiments are expressed as collectives, parallelism strategy, and message sizes — not as abstract packet streams.</p></div>
+</div>
+
+<h3>When to reach for it</h3>
+<ul>
+  <li><strong>Design bake-off</strong> — rail-optimized vs. standard leaf-spine; 2-tier vs. 3-tier; oversubscription ratio trade-offs.</li>
+  <li><strong>Vendor / firmware qualification</strong> — same workload across two switch platforms or two firmware builds.</li>
+  <li><strong>Congestion-control tuning</strong> — ECN thresholds, PFC watermarks, DCQCN/rate-control parameters, buffer carving.</li>
+  <li><strong>Load-balancing evaluation</strong> — ECMP vs. flowlet vs. packet spraying, and their effect on tail latency.</li>
+  <li><strong>Failure-mode rehearsal</strong> — link down, degraded optic, single slow endpoint; measure how far the blast radius spreads.</li>
+  <li><strong>Regression gating</strong> — nightly runs that fail the build when JCT drifts beyond a threshold.</li>
+</ul>
+
+<div class="note">
+  <b>Scope boundary</b>
+  The tool answers "how does <em>the network</em> affect this job?" It does not model accelerator kernels, memory
+  bandwidth, or framework-level inefficiency. Compute is represented as a configurable time gap, not executed.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="concepts"><span class="num">2.</span>Core concepts</h2>
+
+<h3>Collectives</h3>
+<p>Distributed training is built from a small set of collective communication primitives. Each stresses the fabric
+differently, and knowing which one dominates your job tells you which fabric property matters most.</p>
+
+<table>
+  <thead><tr><th>Collective</th><th>Pattern</th><th>Typical use</th><th>Stresses</th></tr></thead>
+  <tbody>
+    <tr><td><code>AllReduce</code></td><td>Every rank contributes, every rank receives the reduced result</td><td>Gradient synchronization in data parallelism</td><td>Bisection bandwidth; slowest-link sensitivity</td></tr>
+    <tr><td><code>AllGather</code></td><td>Each rank's shard is distributed to all ranks</td><td>Weight/parameter gathering (e.g. sharded optimizers)</td><td>Fan-out, incast at receivers</td></tr>
+    <tr><td><code>ReduceScatter</code></td><td>Reduce, then each rank keeps one shard</td><td>First half of a ring AllReduce; sharded gradients</td><td>Fan-in, buffer occupancy</td></tr>
+    <tr><td><code>All-to-All</code></td><td>Every rank sends distinct data to every other rank</td><td>Mixture-of-Experts routing; sequence/expert parallelism</td><td>Load balancing — the harshest ECMP test</td></tr>
+    <tr><td><code>Broadcast</code> / <code>Reduce</code></td><td>One-to-many / many-to-one</td><td>Checkpoint distribution, metric aggregation</td><td>Root-node hotspotting</td></tr>
+  </tbody>
+</table>
+
+<h3>Parallelism strategy</h3>
+<p>How a model is split across accelerators determines <em>where</em> traffic lands in the topology:</p>
+<ul>
+  <li><strong>Data parallel (DP)</strong> — replicas hold the whole model; gradient <code>AllReduce</code> each step. Traffic is bulk, periodic, and spans the widest scope.</li>
+  <li><strong>Tensor parallel (TP)</strong> — a single layer is split across accelerators; chatty, latency-sensitive exchanges. Normally kept inside a scale-up domain (one node / one rack).</li>
+  <li><strong>Pipeline parallel (PP)</strong> — layer groups on different stages; point-to-point activations, sensitive to stage skew (the "bubble").</li>
+  <li><strong>Expert parallel (EP)</strong> — MoE experts across ranks; dominated by <code>All-to-All</code>, often the hardest pattern for a fabric to balance.</li>
+</ul>
+<p>Real jobs combine these (often written as 3D or 4D parallelism, e.g. <code>TP=8, PP=4, DP=16</code>). The
+product of the dimensions is the total rank count.</p>
+
+<h3>Compute gap</h3>
+<p>Between collectives, real accelerators are busy. The emulator reproduces that pause so communication arrives in a
+realistic rhythm rather than as a saturating flood. Two knobs matter: the gap duration (how long a step's compute
+takes) and the jitter (how much ranks drift apart). Jitter is what turns a well-behaved job into an incast event.</p>
+
+<h3>Job completion time (JCT)</h3>
+<p>The headline metric: wall-clock time to finish a fixed number of steps. Everything else in the tool exists to
+explain a JCT difference. A useful decomposition:</p>
+<pre><code>JCT  =  steps × ( compute_time  +  exposed_communication_time )
+
+exposed_communication_time  =  collective_time  −  overlap_with_compute</code></pre>
+<p>Network work reduces the second term. If a change moves JCT by less than run-to-run variance, it did not
+help — which is why repeatability matters as much as the measurement itself.</p>
+
+<!-- ============================================================ -->
+<h2 id="architecture"><span class="num">3.</span>Architecture</h2>
+
+<p>Three planes, cleanly separated. Keeping management traffic off the data plane is not optional — it is what
+makes results trustworthy.</p>
+
+<figure>
+<svg viewBox="0 0 760 420" role="img" aria-label="Architecture diagram: controller and emulated ranks connected through a leaf-spine device under test">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="currentColor"/>
+    </marker>
+    <style>
+      .bx{fill:none;stroke:currentColor;stroke-width:1.4;rx:8}
+      .lbl{font:600 12.5px var(--sans, sans-serif);fill:currentColor}
+      .sub{font:11px var(--sans, sans-serif);fill:currentColor;opacity:.62}
+      .ln{stroke:currentColor;stroke-width:1.3;fill:none;opacity:.75}
+      .dash{stroke-dasharray:4 3;opacity:.5}
+    </style>
+  </defs>
+  <g color="var(--fg)">
+    <!-- control plane -->
+    <rect x="20" y="16" width="200" height="66" class="bx" rx="8" style="fill:var(--bg-alt)"/>
+    <text x="36" y="42" class="lbl">Controller / Web UI</text>
+    <text x="36" y="60" class="sub">experiments · REST API · reports</text>
+    <text x="36" y="74" class="sub">management network only</text>
+
+    <!-- spine -->
+    <rect x="270" y="16" width="130" height="50" class="bx" rx="8" style="fill:var(--accent-soft)"/>
+    <text x="303" y="38" class="lbl">Spine 1</text>
+    <text x="288" y="54" class="sub">device under test</text>
+    <rect x="430" y="16" width="130" height="50" class="bx" rx="8" style="fill:var(--accent-soft)"/>
+    <text x="463" y="38" class="lbl">Spine 2</text>
+    <text x="448" y="54" class="sub">device under test</text>
+
+    <!-- leaves -->
+    <rect x="250" y="148" width="150" height="50" class="bx" rx="8" style="fill:var(--bg-sunk)"/>
+    <text x="300" y="170" class="lbl">Leaf A</text>
+    <text x="285" y="187" class="sub">rail 0 · rail 1</text>
+    <rect x="430" y="148" width="150" height="50" class="bx" rx="8" style="fill:var(--bg-sunk)"/>
+    <text x="480" y="170" class="lbl">Leaf B</text>
+    <text x="465" y="187" class="sub">rail 0 · rail 1</text>
+
+    <!-- emulation appliances -->
+    <rect x="230" y="280" width="190" height="86" class="bx" rx="8" style="fill:var(--bg-alt)"/>
+    <text x="246" y="304" class="lbl">Emulation port group 1</text>
+    <text x="246" y="322" class="sub">ranks 0–63 · line-rate NICs</text>
+    <text x="246" y="338" class="sub">RoCEv2 / RDMA endpoints</text>
+    <text x="246" y="354" class="sub">compute-gap generator</text>
+
+    <rect x="450" y="280" width="190" height="86" class="bx" rx="8" style="fill:var(--bg-alt)"/>
+    <text x="466" y="304" class="lbl">Emulation port group 2</text>
+    <text x="466" y="322" class="sub">ranks 64–127 · line-rate NICs</text>
+    <text x="466" y="338" class="sub">RoCEv2 / RDMA endpoints</text>
+    <text x="466" y="354" class="sub">compute-gap generator</text>
+
+    <!-- links -->
+    <line x1="325" y1="148" x2="325" y2="66" class="ln"/>
+    <line x1="340" y1="148" x2="480" y2="66" class="ln"/>
+    <line x1="505" y1="148" x2="505" y2="66" class="ln"/>
+    <line x1="490" y1="148" x2="350" y2="66" class="ln"/>
+    <line x1="325" y1="280" x2="325" y2="198" class="ln"/>
+    <line x1="505" y1="280" x2="505" y2="198" class="ln"/>
+
+    <!-- mgmt links -->
+    <path d="M120 82 C120 230 150 330 230 330" class="ln dash" marker-end="url(#ar)"/>
+    <path d="M150 82 C150 120 210 60 270 45" class="ln dash" marker-end="url(#ar)"/>
+    <text x="30" y="330" class="sub">dashed = management</text>
+    <text x="30" y="346" class="sub">solid = data plane</text>
+  </g>
+</svg>
+<figcaption>Controller orchestrates; emulated ranks generate real RDMA traffic across the fabric under test.</figcaption>
+</figure>
+
+<table>
+  <thead><tr><th>Plane</th><th>Component</th><th>Responsibility</th></tr></thead>
+  <tbody>
+    <tr><td>Control</td><td>Controller / web UI / REST API</td><td>Experiment definition, scheduling, orchestration, result storage, reporting</td></tr>
+    <tr><td>Data</td><td>Emulation appliance ports</td><td>Terminate RDMA endpoints, execute collectives, inject compute gaps, timestamp at hardware precision</td></tr>
+    <tr><td>Data</td><td>Device under test (DUT)</td><td>Your actual leaf/spine switches, optics, and cabling — the thing being characterized</td></tr>
+    <tr><td>Telemetry</td><td>Switch counters / streaming telemetry</td><td>Queue depth, ECN marks, PFC pause, drops — correlated against JCT on the same timeline</td></tr>
+  </tbody>
+</table>
+
+<div class="note warn">
+  <b>Clock discipline</b>
+  Fabric measurements are only as good as the timebase. Hardware timestamping on the appliance plus a disciplined
+  reference (PTP where available) is what makes microsecond-level tail latency meaningful. Software timestamps on a
+  general-purpose host are not a substitute.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="prereqs"><span class="num">4.</span>Prerequisites</h2>
+
+<h4>Hardware</h4>
+<ul>
+  <li>Emulation appliance(s) with enough ports at the DUT's native speed (100/200/400/800 GbE as applicable).</li>
+  <li>DUT switches cabled in the topology you intend to characterize, with optics known-good.</li>
+  <li>Out-of-band management network reaching the controller, the appliances, and every DUT.</li>
+</ul>
+
+<h4>Software &amp; access</h4>
+<ul>
+  <li>Controller software at a version compatible with the appliance firmware — check the release's compatibility matrix; a mismatch here is the single most common day-one failure.</li>
+  <li>Valid licences reachable from the controller (<code>&lt;licence-server-host:port&gt;</code>).</li>
+  <li>Switch credentials with permission to read counters and, if you plan to automate tuning sweeps, to apply config.</li>
+  <li>A modern browser for the UI; an API token if you will drive it from scripts.</li>
+</ul>
+
+<h4>Fabric readiness checklist</h4>
+<ul>
+  <li>Lossless transport configured end to end if your workload assumes it (PFC priority, ECN marking, buffer allocation consistent on <em>every</em> hop).</li>
+  <li>MTU consistent fabric-wide — a single hop with a smaller MTU will silently dominate your results.</li>
+  <li>Routing converged and ECMP groups healthy; no leftover drained links from a previous test.</li>
+  <li>Counters cleared before a measurement run.</li>
+</ul>
+
+<div class="note">
+  <b>Record the baseline</b>
+  Before the first workload, capture firmware versions, switch running-config, optic inventory, and cabling map.
+  When a result looks strange three weeks later, this snapshot is how you find out what changed.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="quickstart"><span class="num">5.</span>Quick start</h2>
+
+<p>The shortest path from a cabled lab to a first meaningful number.</p>
+
+<ol class="steps">
+  <li><strong>Bring up the controller</strong>
+    Reach the controller at <code>https://&lt;controller-host&gt;</code>, sign in, and confirm the licence status
+    page is green. Resolve licensing before anything else — downstream errors caused by licensing rarely say so.</li>
+
+  <li><strong>Register the emulation resources</strong>
+    Add each appliance/chassis by management address. Verify every intended port shows <em>link up</em> at the
+    expected speed and FEC mode. A port that negotiated down to a lower speed will quietly halve your results.</li>
+
+  <li><strong>Describe the fabric</strong>
+    Enter the topology (see §6) so the tool knows which emulated rank sits behind which leaf port. Rank-to-port
+    mapping is what makes locality-aware results interpretable.</li>
+
+  <li><strong>Pick a starter workload</strong>
+    Begin with a single <code>AllReduce</code> over all ranks at a fixed message size. One collective, no
+    parallelism mix, no jitter. You are validating the harness, not the design.</li>
+
+  <li><strong>Run and sanity-check</strong>
+    Compare measured bus bandwidth against the theoretical ceiling for your port speed and rank count. Within a
+    sensible fraction of line rate means the plumbing is right. Wildly below means stop and debug the setup
+    (§12) — do not start tuning.</li>
+
+  <li><strong>Lock the baseline</strong>
+    Repeat the same run three to five times and record the spread. That spread is your noise floor: any future
+    "improvement" smaller than it is not real.</li>
+
+  <li><strong>Change exactly one thing</strong>
+    Now vary a single variable — ECN threshold, load-balancing mode, message size — and re-run. One delta per
+    experiment is the entire discipline.</li>
+</ol>
+
+<div class="note ok">
+  <b>Milestone</b>
+  A repeatable baseline with a known noise floor. Everything after this is comparison, and comparison is only
+  valid against a baseline you trust.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="fabric"><span class="num">6.</span>Modeling the fabric</h2>
+
+<h3>Topology choices that matter</h3>
+<table>
+  <thead><tr><th>Decision</th><th>Options</th><th>What it changes</th></tr></thead>
+  <tbody>
+    <tr><td>Tiers</td><td>2-tier leaf-spine, 3-tier with super-spine</td><td>Hop count, failure blast radius, cost per port</td></tr>
+    <tr><td>Rail design</td><td>Rail-optimized vs. standard</td><td>Whether same-rail collectives stay one hop away; strongly affects <code>AllReduce</code> efficiency</td></tr>
+    <tr><td>Oversubscription</td><td>1:1, 2:1, 4:1</td><td>Headroom under bursty <code>All-to-All</code>; where congestion first appears</td></tr>
+    <tr><td>Load balancing</td><td>ECMP hash, flowlet, packet spraying</td><td>Flow entropy handling; tail latency and reordering behavior</td></tr>
+    <tr><td>Transport</td><td>Lossless (PFC) vs. lossy with ECN-driven CC</td><td>Whether congestion turns into pause propagation or into drops and rate reduction</td></tr>
+  </tbody>
+</table>
+
+<h3>Rank placement</h3>
+<p>Where ranks sit is a first-class experimental variable, not bookkeeping. The same workload on the same fabric can
+differ substantially in JCT depending on placement:</p>
+<ul>
+  <li><strong>Compact / locality-aware</strong> — consecutive ranks on the same leaf. Keeps TP traffic local, minimizes spine crossings. Usually the best case.</li>
+  <li><strong>Striped</strong> — ranks spread round-robin across leaves. Maximizes spine utilization; a good stress case for bisection bandwidth.</li>
+  <li><strong>Fragmented</strong> — the realistic case in a busy shared cluster, where a scheduler hands you whatever is free. Worth measuring explicitly: it is often where the surprise lives.</li>
+</ul>
+
+<h3>Entropy and hashing</h3>
+<p>RDMA jobs generate far fewer flows than a typical cloud workload. With only a handful of large, long-lived flows,
+an ECMP hash has little to work with, and two elephant flows colliding on one uplink can throttle an entire
+collective. Increasing entropy (more QPs per rank, varied source ports) or adopting adaptive/spraying load balancing
+is a standard remedy — and a first-class thing to A/B here.</p>
+
+<div class="note warn">
+  <b>Symmetry matters</b>
+  Asymmetric cabling or an uneven number of uplinks per leaf will skew hashing in a way that is easy to mistake for
+  a congestion-control problem. Verify uplink symmetry before you tune anything.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="workload"><span class="num">7.</span>Defining a workload</h2>
+
+<p>A workload definition answers four questions: who participates, what they exchange, how large, and how often.</p>
+
+<table>
+  <thead><tr><th>Parameter</th><th>Meaning</th><th>Starting point</th></tr></thead>
+  <tbody>
+    <tr><td>Rank count</td><td>Number of emulated accelerators</td><td>Match the target cluster, or the largest the appliance supports</td></tr>
+    <tr><td>Parallelism</td><td>TP / PP / DP / EP dimensions</td><td>Mirror the model you plan to train; product = rank count</td></tr>
+    <tr><td>Collective(s)</td><td>Operations per step and their order</td><td>Start with one; add the mix once single-collective results are clean</td></tr>
+    <tr><td>Message size</td><td>Bytes per rank per collective</td><td>Sweep small → large; small sizes expose latency, large sizes expose bandwidth</td></tr>
+    <tr><td>Algorithm</td><td>Ring, tree, hierarchical, …</td><td>Ring for bandwidth-bound, tree for latency-bound; test both when unsure</td></tr>
+    <tr><td>Compute gap</td><td>Emulated per-step compute time</td><td>Derive from a real step time if you have one; otherwise sweep</td></tr>
+    <tr><td>Jitter</td><td>Spread in rank start times</td><td>Start at zero, then add — this is where incast appears</td></tr>
+    <tr><td>Steps / duration</td><td>Iterations per run</td><td>Long enough that startup transients are a small fraction of total</td></tr>
+  </tbody>
+</table>
+
+<h3>A worked example</h3>
+<p>A 128-rank job with <code>TP=8, PP=2, DP=8</code> and a small-MoE flavor, expressed as a portable experiment
+descriptor. Field names below are illustrative — map them to your release's schema:</p>
+
+<pre><code><span class="cmt"># experiment.yaml — illustrative structure, adapt to your release's schema</span>
+name: moe-128r-allreduce-vs-a2a
+fabric:
+  topology: leaf-spine
+  leaves: 4
+  spines: 2
+  uplinks_per_leaf: 4
+  placement: compact          <span class="cmt"># compact | striped | fragmented</span>
+
+job:
+  ranks: 128
+  parallelism: { tp: 8, pp: 2, dp: 8 }
+  steps: 200
+  compute_gap_ms: 12
+  gap_jitter_pct: 5
+
+collectives:
+  - op: all_reduce
+    scope: dp                 <span class="cmt"># gradient sync across data-parallel replicas</span>
+    message_bytes: 256Mi
+    algorithm: ring
+  - op: all_to_all
+    scope: ep                 <span class="cmt"># expert routing — the load-balancing stress case</span>
+    message_bytes: 8Mi
+
+transport:
+  type: rocev2
+  lossless: true
+  ecn: { min_kb: 100, max_kb: 400, probability: 0.02 }
+  qps_per_rank: 8             <span class="cmt"># raise for more ECMP entropy</span>
+
+measure:
+  primary: job_completion_time
+  also: [ bus_bandwidth, p99_collective_latency, ecn_marks, pfc_pause_duration ]
+  repeats: 5                  <span class="cmt"># establishes the noise floor</span></code></pre>
+
+<div class="note">
+  <b>Sweep, don't guess</b>
+  Message size in particular is not a single number — a job's behavior at 1 MiB and at 256 MiB can point at
+  opposite bottlenecks. Sweep by powers of two and plot JCT against size; the knee tells you where your fabric stops
+  being latency-bound and starts being bandwidth-bound.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="run"><span class="num">8.</span>Running an experiment</h2>
+
+<ol class="steps">
+  <li><strong>Pre-flight</strong>
+    Links up at expected speed, counters cleared, no residual config from the previous run, DUT clock synced.</li>
+  <li><strong>Warm-up</strong>
+    Discard the first handful of steps. Route caches, ARP/ND resolution, and CC state need to settle; including
+    them inflates JCT and adds variance.</li>
+  <li><strong>Measurement window</strong>
+    Run long enough for a stable average, and record the window explicitly so telemetry can be aligned to it.</li>
+  <li><strong>Repeat</strong>
+    Minimum three runs, five is better. Report median and spread, never a single number.</li>
+  <li><strong>Capture everything</strong>
+    Results plus switch counters, firmware versions, and the exact experiment descriptor. A result without its
+    configuration is an anecdote.</li>
+</ol>
+
+<h3>Experiment hygiene</h3>
+<ul>
+  <li>One variable per comparison. If you changed ECN thresholds <em>and</em> load-balancing mode, you have learned nothing about either.</li>
+  <li>Re-run the baseline periodically during a long tuning session — lab drift is real, and a shifted baseline invalidates the deltas you collected after it shifted.</li>
+  <li>Keep a lab journal keyed by experiment name. Future-you will not remember why run 14 used a different MTU.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="results"><span class="num">9.</span>Reading the results</h2>
+
+<table>
+  <thead><tr><th>Metric</th><th>What it tells you</th><th>Watch for</th></tr></thead>
+  <tbody>
+    <tr><td><strong>JCT</strong></td><td>End-to-end cost of the job — the number that matters to the business</td><td>Compare medians; ignore deltas inside the noise floor</td></tr>
+    <tr><td><strong>Algorithm / bus bandwidth</strong></td><td>Effective throughput achieved by the collective</td><td>Well below theoretical ceiling ⇒ congestion, imbalance, or a negotiated-down link</td></tr>
+    <tr><td><strong>Collective latency p50 / p99 / max</strong></td><td>Distribution, not just the average</td><td>A wide p99/p50 gap means a straggler is pacing the job</td></tr>
+    <tr><td><strong>Per-rank completion spread</strong></td><td>Which ranks finish last, consistently</td><td>The same rank always last ⇒ a specific port, optic, or placement problem</td></tr>
+    <tr><td><strong>ECN marks</strong></td><td>Congestion signaled to senders</td><td>Near zero with high latency ⇒ thresholds too high to react in time</td></tr>
+    <tr><td><strong>PFC pause frames / duration</strong></td><td>Backpressure in a lossless fabric</td><td>Sustained pause is a red flag: congestion spreading upstream toward deadlock risk</td></tr>
+    <tr><td><strong>Queue depth / buffer occupancy</strong></td><td>Where packets are piling up</td><td>Isolates the specific hop and queue responsible</td></tr>
+    <tr><td><strong>Drops / retransmits</strong></td><td>Packet loss</td><td>In a lossless design, any nonzero value is a configuration bug until proven otherwise</td></tr>
+    <tr><td><strong>Link utilization imbalance</strong></td><td>How evenly uplinks are loaded</td><td>Large spread across a single ECMP group ⇒ entropy or hashing problem, not a capacity problem</td></tr>
+  </tbody>
+</table>
+
+<h3>Diagnostic reasoning</h3>
+<p>Symptom → likely cause → next measurement:</p>
+<ul>
+  <li><strong>High JCT, low utilization, low ECN</strong> → the job is latency-bound or compute-gap-bound, not network-limited. Reduce the gap or shrink message size to confirm before touching the fabric.</li>
+  <li><strong>High JCT, uneven uplink utilization</strong> → load-balancing/entropy problem. Raise QPs per rank or change hashing mode and re-measure.</li>
+  <li><strong>High JCT, heavy PFC pause</strong> → congestion control reacting too slowly, so backpressure is doing the work. Lower ECN thresholds so senders slow before pause engages.</li>
+  <li><strong>High JCT, drops in a lossless fabric</strong> → PFC misconfigured on at least one hop, or a priority mismatch. Audit every hop, including the ones you are sure about.</li>
+  <li><strong>Good average, terrible p99</strong> → a straggler. Find the consistently-last rank and inspect that path physically: optic, cable, port config.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="playbook"><span class="num">10.</span>Tuning playbook</h2>
+
+<p>Ordered by typical payoff per unit of effort. Re-measure after every single change.</p>
+
+<ol class="steps">
+  <li><strong>Fix the physical layer first</strong>
+    Negotiated speed, FEC mode, error counters, marginal optics. No amount of congestion-control tuning compensates
+    for one flapping link, and a bad optic mimics a congestion problem convincingly.</li>
+  <li><strong>Make MTU and priority mapping consistent</strong>
+    Every hop, every direction. Inconsistency here produces results that look like a subtle CC issue and are not.</li>
+  <li><strong>Get load balancing right</strong>
+    Usually the largest single win on AI fabrics, because low flow counts defeat naive hashing. Compare ECMP,
+    flowlet, and spraying with the same workload; watch uplink imbalance, not just JCT.</li>
+  <li><strong>Raise entropy</strong>
+    More QPs per rank gives the hash more to distribute. Cheap to try, frequently effective, and it interacts with
+    the previous step — evaluate them together after evaluating each alone.</li>
+  <li><strong>Tune ECN before touching PFC</strong>
+    You want senders to slow down before backpressure is needed. Lower the marking threshold until ECN marks appear
+    early and PFC pause approaches zero.</li>
+  <li><strong>Use PFC as a safety net, not a mechanism</strong>
+    Sustained pause means CC is not doing its job. Headroom and watermarks should prevent loss, not manage
+    steady-state congestion.</li>
+  <li><strong>Revisit buffer carving</strong>
+    Only after CC behaves. Shared-buffer thresholds decide how much burst absorption a port gets; mis-carving
+    shows up as drops under bursty <code>All-to-All</code> while averages look fine.</li>
+  <li><strong>Re-examine placement</strong>
+    A locality-aware placement can beat a fabric-level change outright. If the scheduler in production cannot
+    guarantee it, measure the fragmented case and design for that instead.</li>
+  <li><strong>Only then consider topology</strong>
+    Adding spines or changing oversubscription is the expensive lever. Reach for it once you have shown the cheap
+    ones are exhausted — and quantify the JCT gain per dollar before proposing it.</li>
+</ol>
+
+<div class="note warn">
+  <b>The trap</b>
+  Tuning against a single workload produces a fabric that is excellent at that workload and fragile everywhere
+  else. Validate any candidate configuration against at least: one bandwidth-bound case (large <code>AllReduce</code>),
+  one balance-stress case (<code>All-to-All</code>), and one failure case (a downed link).
+</div>
+
+<!-- ============================================================ -->
+<h2 id="automation"><span class="num">11.</span>Automation &amp; CI</h2>
+
+<p>Manual runs prove a point once. Automated runs catch regressions forever. The pattern:</p>
+
+<pre><code><span class="cmt"># nightly-fabric-regression — illustrative pseudocode</span>
+
+for cfg in baselines/*.yaml; do
+  run_id=$(kai-cli experiment start --file "$cfg" --wait)     <span class="cmt"># adapt to your CLI/API</span>
+  kai-cli results export --run "$run_id" --format json &gt; "out/$(basename "$cfg").json"
+done
+
+<span class="cmt"># fail the build if JCT regressed beyond the measured noise floor</span>
+python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code></pre>
+
+<p>Practical guidance:</p>
+<ul>
+  <li><strong>Version experiment descriptors in git</strong>, next to the switch configs they assume. A result is only reproducible if both are pinned.</li>
+  <li><strong>Set the tolerance from the measured noise floor</strong>, not from a round number. If run-to-run spread is 4%, a 3% gate will page you every night.</li>
+  <li><strong>Gate on the median of repeats</strong>, never a single run.</li>
+  <li><strong>Archive raw results plus telemetry</strong> — when a regression appears, the counters from the failing night are what let you diagnose it without reproducing it.</li>
+  <li><strong>Re-baseline deliberately</strong> after an intentional config or firmware change, and record why in the commit message.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="troubleshooting"><span class="num">12.</span>Troubleshooting</h2>
+
+<table>
+  <thead><tr><th>Symptom</th><th>Likely causes</th><th>First checks</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Controller cannot reach an appliance</td>
+      <td>Management routing/firewall; wrong address; version mismatch</td>
+      <td>Ping and port-check from the controller; confirm firmware is in the supported matrix</td>
+    </tr>
+    <tr>
+      <td>Ports down or at unexpected speed</td>
+      <td>Optic/cable fault; FEC mismatch; forced speed on the DUT side</td>
+      <td>Compare both ends' port config; swap the optic; read error counters</td>
+    </tr>
+    <tr>
+      <td>Experiment fails to start</td>
+      <td>Licence unavailable; resource already reserved; invalid descriptor</td>
+      <td>Licence status page first; then who holds the reservation; then schema validation</td>
+    </tr>
+    <tr>
+      <td>Throughput far below line rate</td>
+      <td>Negotiated-down link; MTU mismatch; CC throttling; oversubscribed uplinks</td>
+      <td>Per-port utilization; MTU audit on every hop; ECN/PFC counters</td>
+    </tr>
+    <tr>
+      <td>Results vary wildly between identical runs</td>
+      <td>No warm-up; background traffic on the DUT; thermal/optic marginality; unsynced clocks</td>
+      <td>Add warm-up; isolate the DUT; check clock sync; re-run the baseline</td>
+    </tr>
+    <tr>
+      <td>One rank always finishes last</td>
+      <td>Bad port/optic on that path; asymmetric uplinks on its leaf; placement artifact</td>
+      <td>Move the rank to a different port and re-run — if the slowness follows the port, it is physical</td>
+    </tr>
+    <tr>
+      <td>PFC storm / traffic stalls</td>
+      <td>Pause propagating upstream; insufficient headroom; priority mismatch</td>
+      <td>Pause counters per hop to find the origin; verify priority mapping end to end</td>
+    </tr>
+    <tr>
+      <td>Drops on a "lossless" fabric</td>
+      <td>PFC not enabled on every hop; wrong priority; buffer headroom too small</td>
+      <td>Audit PFC config hop by hop — assume nothing about the hops you did not configure yourself</td>
+    </tr>
+    <tr>
+      <td>Telemetry and results do not line up</td>
+      <td>Clock skew; wrong measurement window; counters not cleared</td>
+      <td>Verify time sync; record window boundaries explicitly; clear counters pre-run</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <b>Debug order</b>
+  Physical → configuration → transport → workload → topology. Working bottom-up is slower per step but converges;
+  starting in the middle produces confident wrong answers.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="glossary"><span class="num">13.</span>Glossary</h2>
+
+<dl class="gloss">
+  <dt>AllReduce</dt><dd>Collective where every rank contributes data and every rank receives the reduced result; the backbone of data-parallel gradient sync.</dd>
+  <dt>All-to-All</dt><dd>Every rank sends distinct data to every other rank; dominant in Mixture-of-Experts routing and the harshest test of fabric load balancing.</dd>
+  <dt>Bus bandwidth</dt><dd>Normalized throughput measure for a collective that allows comparison across rank counts and algorithms.</dd>
+  <dt>Collective</dt><dd>A communication primitive involving a group of ranks acting together, as opposed to point-to-point messaging.</dd>
+  <dt>Compute gap</dt><dd>Emulated time a rank spends computing between collectives; what makes generated traffic resemble a real training rhythm.</dd>
+  <dt>DCQCN</dt><dd>Congestion-control scheme for RoCE combining ECN marking with rate adjustment at the sender.</dd>
+  <dt>DUT</dt><dd>Device under test — the switch, firmware, or fabric being characterized.</dd>
+  <dt>ECMP</dt><dd>Equal-cost multi-path routing; distributes flows across parallel uplinks, usually by hashing header fields.</dd>
+  <dt>ECN</dt><dd>Explicit Congestion Notification; marks packets instead of dropping them so senders can slow down early.</dd>
+  <dt>Incast</dt><dd>Many senders targeting one receiver simultaneously, overwhelming its buffers; a classic collective failure mode.</dd>
+  <dt>JCT</dt><dd>Job completion time — wall-clock duration of the emulated job; the primary outcome metric.</dd>
+  <dt>PFC</dt><dd>Priority Flow Control; per-priority link-level pause used to build lossless Ethernet.</dd>
+  <dt>QP</dt><dd>Queue pair — the RDMA connection endpoint abstraction; more QPs per rank means more entropy for ECMP hashing.</dd>
+  <dt>Rail</dt><dd>One of several parallel network planes; rail-optimized designs keep corresponding ranks on the same plane to shorten collectives.</dd>
+  <dt>Rank</dt><dd>One participant in a distributed job, conventionally one accelerator; emulated here rather than physically present.</dd>
+  <dt>RoCEv2</dt><dd>RDMA over Converged Ethernet v2 — routable RDMA over UDP/IP, the common transport for Ethernet AI fabrics.</dd>
+  <dt>Straggler</dt><dd>A rank that consistently finishes late and therefore paces the whole job, since collectives complete only when all ranks arrive.</dd>
+</dl>
+
+<!-- ============================================================ -->
+<h2 id="next"><span class="num">14.</span>Next steps</h2>
+
+<ol>
+  <li><strong>Reconcile with the official docs.</strong> Replace every <code>&lt;placeholder&gt;</code>, and pin the CLI/API syntax and supported-version matrix for your specific release.</li>
+  <li><strong>Add your lab's specifics.</strong> Topology diagram, port map, cabling table, licence server, appliance addresses.</li>
+  <li><strong>Commit your baseline descriptors</strong> alongside this guide so the repository holds both the method and the reference numbers.</li>
+  <li><strong>Automate the regression run</strong> (§11) once two or three baselines are stable.</li>
+</ol>
+
+<p>If you can share the original <code>KAI_Data_Center_Builder_Guide.html</code> — paste its contents into the
+chat or commit it to this repository — the two can be merged so nothing from the original is lost.</p>
+
+<footer>
+  KAI Data Center Builder — Practitioner's Guide · single-file HTML, no external dependencies ·
+  generated for the <code>anuagarw27/KAI</code> repository.
+</footer>
+
+</main>
+</div>
+
+<script>
+(function () {
+  // theme: follow system, allow manual override (persisted)
+  var root = document.documentElement, btn = document.getElementById('themeBtn');
+  var saved = null;
+  try { saved = localStorage.getItem('kai-theme'); } catch (e) {}
+  var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.setAttribute('data-theme', saved || (sysDark ? 'dark' : 'light'));
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('kai-theme', next); } catch (e) {}
+  });
+
+  // highlight the section currently in view
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a[href^="#"]'));
+  var byId = {};
+  links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+  var sections = links
+    .map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); })
+    .filter(Boolean);
+
+  if ('IntersectionObserver' in window) {
+    var visible = new Set();
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { visible.add(e.target.id); } else { visible.delete(e.target.id); }
+      });
+      var current = sections.filter(function (s) { return visible.has(s.id); })[0];
+      if (!current) return;
+      links.forEach(function (a) { a.classList.remove('active'); });
+      if (byId[current.id]) byId[current.id].classList.add('active');
+    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+    sections.forEach(function (s) { obs.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
