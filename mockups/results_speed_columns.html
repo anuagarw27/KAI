@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mockup – Results list with Speed / Lane Speed</title>
+<style>
+  body { margin: 0; font: 12px/1.4 Roboto, "Segoe UI", Arial, sans-serif; color: #222; background: #eee; }
+  .topbar { background: #2b2b2b; color: #fff; padding: 8px 14px; font-size: 13px; }
+  .page { background: #fff; margin: 12px; border: 1px solid #d9d9d9; padding: 10px 14px 18px; }
+  .tabs a { margin-right: 16px; font-weight: 500; }
+  .tabs a.on { text-decoration: underline; }
+  .tabs.sub { margin: 6px 0 12px 12px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #ececec; white-space: nowrap; }
+  th { border-bottom: 1px solid #333; font-weight: 600; }
+  th .s { color: #6b6b6b; font-size: 10px; margin-left: 2px; }
+  th.new, td.new { background: #fff6d6; }
+  .mono { font-family: Consolas, "Courier New", monospace; }
+  .pass { color: #2e8b2e; } .fail { color: #d93025; } .na { color: #aaa; }
+  .legend { margin-top: 12px; font-size: 11px; color: #6b6b6b; }
+</style>
+</head>
+<body>
+<div class="topbar">KEYSIGHT Interconnect Test System &nbsp; v2.0 (Build 1284) &nbsp; INPT-1600-C-2P-OSFP-RM</div>
+<div class="page">
+  <div class="tabs"><a class="on">Tests</a><a>Playlists</a><a>Interconnect Library</a></div>
+  <div class="tabs sub"><a class="on">Results</a><a>Queue</a><a>Configs</a></div>
+  <table>
+    <thead><tr>
+      <th><input type="checkbox"></th>
+      <th>Name<span class="s">⇅</span></th><th>User<span class="s">⇅</span></th><th>Type<span class="s">⇅</span></th>
+      <th class="new">Speed<span class="s">⇅</span></th><th class="new">Lane Speed<span class="s">⇅</span></th>
+      <th>End Time<span class="s">↓</span></th><th>Duration<span class="s">⇅</span></th><th>Loops<span class="s">⇅</span></th>
+      <th>Execution<span class="s">⇅</span></th><th>Results<span class="s">⇅</span></th><th>Size<span class="s">⇅</span></th>
+      <th>Tags</th><th>Open</th>
+    </tr></thead>
+    <tbody id="b"></tbody>
+  </table>
+  <div class="legend">Highlighted = new columns (sample values). Speed = port speed, Lane Speed = per-lane rate, as set in Playground. "—" = not recorded (older runs).</div>
+</div>
+<script>
+const rows = [
+  ["FEC Test","FEC","1.6T","212G","10/03/26 07:06","00:01:04",1,"Stopped","Fail","882 KB"],
+  ["FEC Test","FEC","1.6T","212G","10/03/26 07:03","00:01:23",1,"Completed","Pass","2 MB"],
+  ["FEC Test-200G","FEC","200G","212G","09/22/26 21:19","00:01:18",1,"Completed","Fail","447 KB"],
+  ["FEC Test","FEC","800G","106G","09/22/26 21:09","00:01:26",1,"Completed","Pass","553 KB"],
+  ["FEC Test","FEC","400G","53G","09/22/26 20:58","00:03:27",1,"Completed","Pass","272 KB"],
+  ["FEC Test","FEC","1.6T","212G","09/22/26 20:52","00:01:25",1,"Completed","Fail","2 MB"],
+  ["FEC Test","FEC","1.6T","212G","09/22/26 15:46","00:01:24",1,"Completed","Fail","2 MB"],
+  ["FEC Test","FEC","1.6T","212G","09/22/26 15:42","00:01:25",1,"Completed","Fail","2 MB"],
+  ["BER Test","BERT","800G","106G","09/18/26 18:20","00:05:31",1,"Completed","Fail","809 KB"],
+  ["FEC Test","FEC","—","—","09/11/26 07:09","00:02:25",2,"Completed","Fail","240 KB"],
+];
+const v = x => x === "—" ? '<span class="na">—</span>' : x;
+document.getElementById("b").innerHTML = rows.map(r => `<tr>
+  <td><input type="checkbox"></td><td>${r[0]}</td><td>admin</td><td>${r[1]}</td>
+  <td class="new">${v(r[2])}</td><td class="new">${v(r[3])}</td>
+  <td class="mono">${r[4]}</td><td class="mono">${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td>
+  <td class="${r[8].toLowerCase()}">${r[8]}</td><td>${r[9]}</td><td>✎</td><td>›</td></tr>`).join("");
+</script>
+</body>
+</html>
