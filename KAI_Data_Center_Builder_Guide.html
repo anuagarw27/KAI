@@ -398,14 +398,14 @@ an 800G-DR4 interface (4 &times; 200G PAM4 over single-mode fiber), so it pairs 
 <table>
   <thead><tr><th>Side</th><th>Optic</th><th>Electrical / optical lanes</th><th>Port mode</th></tr></thead>
   <tbody>
-    <tr><td>Appliance</td><td>1.6T-2DR4 (two MPO-12 connectors)</td><td>8 &times; 200G PAM4, split into two groups of 4</td><td>2&times;800G breakout</td></tr>
-    <tr><td>DUT (&times;2)</td><td>800G-DR4 (one MPO-12 connector)</td><td>4 &times; 200G PAM4</td><td>800G, 4 lanes, no breakout</td></tr>
+    <tr><td>Appliance</td><td>1.6T-2DR4 (two MPO-12 connectors)</td><td>Host: 8 &times; 212G PAM4. Fiber: 8 &times; 200G PAM4, split into two DR4 groups of 4</td><td>2&times;800G breakout</td></tr>
+    <tr><td>DUT (&times;2)</td><td>800G-DR4 (one MPO-12 connector)</td><td>Host: 8 &times; 106G PAM4. Fiber: 4 &times; 200G PAM4 (the optic&rsquo;s DSP gearboxes between them)</td><td>800G over 8 lanes, no breakout</td></tr>
   </tbody>
 </table>
 <ul>
   <li><strong>Single-mode MPO-12 trunks, one per 800G half.</strong> Use the polarity the optic vendor specifies for DR4 (normally straight-through / Type&nbsp;B) and APC connectors at both ends. Each half is a plain point-to-point DR4 link; there is no fan-out cable.</li>
   <li><strong>Label which MPO is which half.</strong> Port <code>N/1</code> and <code>N/2</code> on the appliance map to whatever DUT ports those trunks reach. Swapping the two trunks still gives link-up, but it silently moves ranks to the wrong leaf ports and breaks locality-aware results.</li>
-  <li><strong>Match FEC and speed on both ends.</strong> 200G-per-lane links run RS(544,514) FEC. Set the appliance port to 2&times;800G and each DUT port to 800G over 4 lanes; anything auto-negotiated or forced differently on one side shows up as link-down or a link that flaps.</li>
+  <li><strong>Match FEC and speed on both ends.</strong> 200G-per-lane links run RS(544,514) FEC. Set the appliance port to 2&times;800G (4 &times; 212G host lanes per half) and each DUT port to 800G over 8 &times; 106G host lanes. The lane rates differ on purpose: only the fiber side has to match; anything auto-negotiated or forced differently on one side shows up as link-down or a link that flaps.</li>
   <li><strong>Treat the two halves as sharing fate.</strong> Both 800G links live on one optic and one cage. An optic fault, reseat, or port reset takes down two DUT ports and two ranks at once, so account for that when you design failure-injection runs.</li>
 </ul>
 
@@ -714,7 +714,7 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
     </tr>
     <tr>
       <td>Only one half of a 1.6T breakout comes up</td>
-      <td>Appliance port not in 2&times;800G mode; one MPO trunk dirty, unseated, or wrong polarity; DUT port not set to 800G over 4 lanes</td>
+      <td>Appliance port not in 2&times;800G mode; one MPO trunk dirty, unseated, or wrong polarity; DUT port not set to 800G over 8 &times; 106G lanes</td>
       <td>Confirm the breakout mode on the appliance; clean and reseat the dead half's MPO at both ends; compare lane-level optical power/BER for the two halves</td>
     </tr>
     <tr>

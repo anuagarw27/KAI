@@ -10,7 +10,7 @@
   <!-- 1.6T optic -->
   <rect x="70" y="165" width="210" height="205" rx="8" fill="#fde7ea" stroke="#c8102e" stroke-width="2"/>
   <text x="175" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#c8102e">1.6T-2DR4 optic</text>
-  <text x="175" y="208" text-anchor="middle" font-size="12" fill="#4b5563">8 × 200G PAM4 lanes</text>
+  <text x="175" y="208" text-anchor="middle" font-size="11.5" fill="#4b5563">host 8 × 212G · fiber 8 × 200G PAM4</text>
   <!-- halves -->
   <rect x="90" y="222" width="170" height="58" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
   <text x="175" y="245" text-anchor="middle" font-size="13" font-weight="700" fill="#2563eb">Half 1 · port N/1</text>
@@ -22,15 +22,17 @@
   <!-- DUT -->
   <rect x="640" y="95" width="290" height="300" rx="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>
   <text x="785" y="125" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2937">DUT switch (their side)</text>
-  <text x="785" y="146" text-anchor="middle" font-size="13" fill="#4b5563">Each port set to 800G, 4 lanes</text>
-  <rect x="680" y="175" width="210" height="80" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
-  <text x="785" y="203" text-anchor="middle" font-size="14" font-weight="700" fill="#2563eb">800G-DR4 optic</text>
-  <text x="785" y="222" text-anchor="middle" font-size="12" fill="#374151">DUT port A · 4 × 200G PAM4</text>
-  <text x="785" y="240" text-anchor="middle" font-size="12" fill="#374151">MPO-12</text>
-  <rect x="680" y="285" width="210" height="80" rx="8" fill="#ffffff" stroke="#059669" stroke-width="2"/>
-  <text x="785" y="313" text-anchor="middle" font-size="14" font-weight="700" fill="#059669">800G-DR4 optic</text>
-  <text x="785" y="332" text-anchor="middle" font-size="12" fill="#374151">DUT port B · 4 × 200G PAM4</text>
-  <text x="785" y="350" text-anchor="middle" font-size="12" fill="#374151">MPO-12</text>
+  <text x="785" y="146" text-anchor="middle" font-size="13" fill="#4b5563">Each port set to 800G over 8 × 106G lanes</text>
+  <rect x="680" y="165" width="210" height="96" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <text x="785" y="189" text-anchor="middle" font-size="14" font-weight="700" fill="#2563eb">800G-DR4 optic · DUT port A</text>
+  <text x="785" y="210" text-anchor="middle" font-size="12" fill="#374151">host: 8 × 106G PAM4 (electrical)</text>
+  <text x="785" y="228" text-anchor="middle" font-size="12" fill="#374151">fiber: 4 × 200G PAM4 · MPO-12</text>
+  <text x="785" y="247" text-anchor="middle" font-size="11" fill="#6b7280">DSP gearbox 8 × 106G ↔ 4 × 200G</text>
+  <rect x="680" y="277" width="210" height="96" rx="8" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="785" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="#059669">800G-DR4 optic · DUT port B</text>
+  <text x="785" y="322" text-anchor="middle" font-size="12" fill="#374151">host: 8 × 106G PAM4 (electrical)</text>
+  <text x="785" y="340" text-anchor="middle" font-size="12" fill="#374151">fiber: 4 × 200G PAM4 · MPO-12</text>
+  <text x="785" y="359" text-anchor="middle" font-size="11" fill="#6b7280">DSP gearbox 8 × 106G ↔ 4 × 200G</text>
 
   <!-- fibers -->
   <path d="M260 251 C 450 251, 480 215, 680 215" fill="none" stroke="#2563eb" stroke-width="5"/>
@@ -39,5 +41,5 @@
   <text x="470" y="352" text-anchor="middle" font-size="12.5" fill="#059669" font-weight="600">SMF MPO-12 trunk · 800G link 2</text>
 
   <!-- footer -->
-  <text x="480" y="425" text-anchor="middle" font-size="13" fill="#374151">Same optics on both ends (DR4, 200G/lane PAM4, single-mode) · RS(544,514) FEC on both ends · Label which trunk is N/1 and which is N/2</text>
+  <text x="480" y="425" text-anchor="middle" font-size="13" fill="#374151">Fiber side matches (DR4: 4 × 200G PAM4 per link, single-mode) · host lanes differ: 212G appliance vs 106G DUT · Label trunks N/1 and N/2</text>
 </svg>
