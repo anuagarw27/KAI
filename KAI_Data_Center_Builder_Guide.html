@@ -392,7 +392,8 @@ makes results trustworthy.</p>
 <p>The reference lab runs each appliance port in <strong>2&times;800G breakout</strong>: one
 <strong>1.6T-2DR4</strong> optic in the appliance cage, fanning out to <strong>two 800G-DR4</strong> optics on the
 DUT side. Each 1.6T port therefore presents as two independent 800G logical ports, and each one lands on its own
-DUT port.</p>
+DUT port. The two ends interoperate because they use the same optical technology: each half of the 1.6T-2DR4 is
+an 800G-DR4 interface (4 &times; 200G PAM4 over single-mode fiber), so it pairs with a standard 800G-DR4 optic.</p>
 <table>
   <thead><tr><th>Side</th><th>Optic</th><th>Electrical / optical lanes</th><th>Port mode</th></tr></thead>
   <tbody>
