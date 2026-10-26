@@ -388,6 +388,25 @@ makes results trustworthy.</p>
   <li>Out-of-band management network reaching the controller, the appliances, and every DUT.</li>
 </ul>
 
+<h4>Cabling: 1.6T appliance to 2&times;800G DUT (breakout)</h4>
+<p>The reference lab runs each appliance port in <strong>2&times;800G breakout</strong>: one
+<strong>1.6T-2DR4</strong> optic in the appliance cage, fanning out to <strong>two 800G-DR4</strong> optics on the
+DUT side. Each 1.6T port therefore presents as two independent 800G logical ports, and each one lands on its own
+DUT port.</p>
+<table>
+  <thead><tr><th>Side</th><th>Optic</th><th>Electrical / optical lanes</th><th>Port mode</th></tr></thead>
+  <tbody>
+    <tr><td>Appliance</td><td>1.6T-2DR4 (two MPO-12 connectors)</td><td>8 &times; 200G PAM4, split into two groups of 4</td><td>2&times;800G breakout</td></tr>
+    <tr><td>DUT (&times;2)</td><td>800G-DR4 (one MPO-12 connector)</td><td>4 &times; 200G PAM4</td><td>800G, 4 lanes, no breakout</td></tr>
+  </tbody>
+</table>
+<ul>
+  <li><strong>Single-mode MPO-12 trunks, one per 800G half.</strong> Use the polarity the optic vendor specifies for DR4 (normally straight-through / Type&nbsp;B) and APC connectors at both ends. Each half is a plain point-to-point DR4 link; there is no fan-out cable.</li>
+  <li><strong>Label which MPO is which half.</strong> Port <code>N/1</code> and <code>N/2</code> on the appliance map to whatever DUT ports those trunks reach. Swapping the two trunks still gives link-up, but it silently moves ranks to the wrong leaf ports and breaks locality-aware results.</li>
+  <li><strong>Match FEC and speed on both ends.</strong> 200G-per-lane links run RS(544,514) FEC. Set the appliance port to 2&times;800G and each DUT port to 800G over 4 lanes; anything auto-negotiated or forced differently on one side shows up as link-down or a link that flaps.</li>
+  <li><strong>Treat the two halves as sharing fate.</strong> Both 800G links live on one optic and one cage. An optic fault, reseat, or port reset takes down two DUT ports and two ranks at once, so account for that when you design failure-injection runs.</li>
+</ul>
+
 <h4>Software &amp; access</h4>
 <ul>
   <li>Controller software at a version compatible with the appliance firmware — check the release's compatibility matrix; a mismatch here is the single most common day-one failure.</li>
@@ -421,8 +440,10 @@ makes results trustworthy.</p>
     page is green. Resolve licensing before anything else — downstream errors caused by licensing rarely say so.</li>
 
   <li><strong>Register the emulation resources</strong>
-    Add each appliance/chassis by management address. Verify every intended port shows <em>link up</em> at the
-    expected speed and FEC mode. A port that negotiated down to a lower speed will quietly halve your results.</li>
+    Add each appliance/chassis by management address. Put each 1.6T port into 2&times;800G breakout, then verify
+    that <em>both</em> 800G logical ports show <em>link up</em> at 800G with RS(544,514) FEC, and that each one lands
+    on the DUT port your cabling map says it should. A port that negotiated down to a lower speed will quietly halve
+    your results.</li>
 
   <li><strong>Describe the fabric</strong>
     Enter the topology (see §6) so the tool knows which emulated rank sits behind which leaf port. Rank-to-port
@@ -433,7 +454,8 @@ makes results trustworthy.</p>
     parallelism mix, no jitter. You are validating the harness, not the design.</li>
 
   <li><strong>Run and sanity-check</strong>
-    Compare measured bus bandwidth against the theoretical ceiling for your port speed and rank count. Within a
+    Compare measured bus bandwidth against the theoretical ceiling for your port speed and rank count. With
+    breakout the per-rank ceiling is 800G (the logical port), not the 1.6T of the physical cage. Within a
     sensible fraction of line rate means the plumbing is right. Wildly below means stop and debug the setup
     (§12) — do not start tuning.</li>
 
@@ -689,6 +711,16 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
       <td>Compare both ends' port config; swap the optic; read error counters</td>
     </tr>
     <tr>
+      <td>Only one half of a 1.6T breakout comes up</td>
+      <td>Appliance port not in 2&times;800G mode; one MPO trunk dirty, unseated, or wrong polarity; DUT port not set to 800G over 4 lanes</td>
+      <td>Confirm the breakout mode on the appliance; clean and reseat the dead half's MPO at both ends; compare lane-level optical power/BER for the two halves</td>
+    </tr>
+    <tr>
+      <td>Two ranks are slow or flap together</td>
+      <td>They are the two halves of one 1.6T-2DR4 optic, which is marginal or overheating</td>
+      <td>Check whether the affected ranks share a cage; swap the 1.6T optic and re-run — if the problem moves with the optic, it is the optic</td>
+    </tr>
+    <tr>
       <td>Experiment fails to start</td>
       <td>Licence unavailable; resource already reserved; invalid descriptor</td>
       <td>Licence status page first; then who holds the reservation; then schema validation</td>
@@ -738,6 +770,7 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
 <dl class="gloss">
   <dt>AllReduce</dt><dd>Collective where every rank contributes data and every rank receives the reduced result; the backbone of data-parallel gradient sync.</dd>
   <dt>All-to-All</dt><dd>Every rank sends distinct data to every other rank; dominant in Mixture-of-Experts routing and the harshest test of fabric load balancing.</dd>
+  <dt>Breakout</dt><dd>Running one physical port as several lower-speed logical ports. Here a 1.6T-2DR4 optic carries two independent 800G-DR4 links, each to its own DUT port.</dd>
   <dt>Bus bandwidth</dt><dd>Normalized throughput measure for a collective that allows comparison across rank counts and algorithms.</dd>
   <dt>Collective</dt><dd>A communication primitive involving a group of ranks acting together, as opposed to point-to-point messaging.</dd>
   <dt>Compute gap</dt><dd>Emulated time a rank spends computing between collectives; what makes generated traffic resemble a real training rhythm.</dd>
