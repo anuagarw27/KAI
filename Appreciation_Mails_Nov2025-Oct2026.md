@@ -7,10 +7,12 @@
 
 | Metric | Count |
 |---|---|
-| **Total appreciation emails kept** | **20** |
-| From customers / external senders | 0 (no praise was sent directly by a customer domain; 13 of the 20 are about customer work: Cisco, NSC, Meta) |
-| From managers / leadership | 6 (Indranil Acharya x3, Alok Srivastava, Ram Periakaruppan, Charles Seifert) |
-| From peers / cross-functional colleagues | 14 |
+| **Total appreciation emails kept** | **28** |
+| From customers / external senders | 0 (no praise was sent directly by a customer domain; 17 of the 28 are about customer work: Cisco, NSC, Meta, Credo) |
+| From managers / leadership | 10 (Indranil Acharya x5, Alok Srivastava x2, Ram Periakaruppan x2, Charles Seifert) |
+| From peers / cross-functional colleagues | 18 |
+
+A second, month-by-month pass (Nov 2025 to Mar 2026, all pages of each query) added 8 emails from Nov 2025 to Jan 2026. It found none in Feb or Mar 2026.
 
 Sender roles come from signatures or thread context. I only gave a role when the mail made it clear. Indranil Acharya and Alok Srivastava approved Anurag's customer travel, which places them in his management chain. Charles Seifert's signature reads "Sr. Manager, Network Test Hardware Platforms".
 
@@ -25,6 +27,9 @@ Sender roles come from signatures or thread context. I only gave a role when the
 7. **2026-04-14, Indranil Acharya (manager): reply on the One Arm thread.** *"Great work, Anurag! Your proactive approach and attention to detail have made a real difference in catching critical issues early and improving overall quality."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAH%2Fkk22QAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
 8. **2026-09-22, Indranil Acharya (manager): replying to Amritam's call-out.** *"Congratulations, Anurag, on the great work and customer engagement! It's great to see the positive impact with the customer that is helping move the opportunity forward."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAIaHGwOgAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
 9. **2026-06-19, Charles Seifert (Sr. Manager): ITS FEC report.** *"Hi Anurag The ITS FEC report is excellent! V1.3 is going to be a killer release! TY for sending."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAIKfxLZQAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
+10. **2025-11-28, Indranil Acharya (manager): FY25 Value Creation Plan comment, delivered by a SuccessFactors notice.** *"Thanks Anurag for the huge effort you made which was the key for our team to success. Thanks."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHpGpYbAAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
+11. **2025-12-08, Ram Periakaruppan (leadership): first two AresONE 1600GE units shipped to Meta. Anurag was on the To line.** *"What an AMAZING achievement!!!! … Thank you to every one of you that enabled us to deliver these first 2 units as we committed to such an important customer."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHqvQ9vQAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
+12. **2026-01-09, Marie Wyszynski: a 26.0 HW bug.** *"Thanks to Anurag I was able to make some progress on this bug. He discovered that if we turned off “qp reuse” that the completion time improved."* [Link](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHwFX9egAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem)
 
 ## All appreciation mails
 
@@ -32,6 +37,14 @@ To/CC: "To" or "CC" is shown where I confirmed it by reading the full message. "
 
 | Date | From | To/CC | Subject | For what | Quote | Link |
 |---|---|---|---|---|---|---|
+| 2025-11-20 | Julio Marcos (ITS) | To | Re: Please prioritize the mode switching bug (ITS-647) | Pushing the developer to fix a kcos reboot-loop bug with BERT that was blocking ITS validation. | "Thanks Anurag for pushing the developer to fix it!" | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHm%2Fc2UwAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-11-28 | Indranil Acharya (manager), in a SuccessFactors notice | To | Routing Notice of Value Creation Plan | His comment on Anurag's FY25 Value Creation Plan. | "Thanks Anurag for the huge effort you made which was the key for our team to success. Thanks." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHpGpYbAAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-12-02 | Joe Wang (Keysight, Credo account) | CC | Re: IxNetwork on INPT-1600 demo for Credo | Supporting the IxNetwork on INPT-1600 demo for Credo. | "Hi Ramya, Debjyoti, Debarati, Anurag, David and team, Thanks so much for your full support on the demonstration." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHpZmr5QAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-12-02 | Indranil Acharya (manager) | Thread | Re: IxNetwork on INPT-1600 demo for Credo | Running the Credo demo on short notice. | "Thanks Anurag for driving the demon on short notice." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHpZmr6AAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-12-02 | Marie Wyszynski | Thread | Re: NE3 is adding large delays in reorder mode | Helping root-cause the NE3 reorder-mode delays (ZTE/CMRI ReTx issue). | "took a team effort. Thank you Bob, Robert H, and Anurag." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHpZmr1QAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-12-07 | Alok Srivastava (leadership) | To | RE: Final Touch | Team weekend push to ship the first two AresONE 1600GE units to Meta. | "Great effort, Team. Thanks all for your help and making this happen over the weekend to meet a critical customer timeline!!" | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHqjGA%2BAAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2025-12-08 | Ram Periakaruppan (leadership) | To | Re: Final Touch | The same Meta AresONE 1600GE delivery milestone. | "What an AMAZING achievement!!!! … Thank you to every one of you that enabled us to deliver these first 2 units as we committed to such an important customer." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHqvQ9vQAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
+| 2026-01-09 | Marie Wyszynski | Thread | RE: 26.0 HW bugs (Blocking + Urgent + High) | Finding that turning off "qp reuse" improved completion time, which unblocked a 26.0 HW bug. | "Thanks to Anurag I was able to make some progress on this bug. He discovered that if we turned off “qp reuse” that the completion time improved." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAHwFX9egAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
 | 2026-04-01 | Salomon Varela (Keysight field/regional; Meta account thread) | Thread | RE: Molex 1.6 T 2.5 M cable. | A quick turnaround bringing up a Molex 1.6TE cable link for the Meta team (IxN Web / IxExplorer). | "Thanks Anurag/Umair for the quick turnaround… If there is anything else you'd like assistance with, do let us know." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAH9v9%2FFAAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
 | 2026-04-13 | Ashutosh Kumar (Cobalt/Troodon dev lead) | To | Thank you Anurag for accelerating One Arm Qualification for Cobalt + Troodon | Catching critical and UX issues missed by regressions, early-morning builds, late handovers and weekend long runs during One Arm qualification. | "you've been putting a lot of honest work here which is inspirational for folks in the team, and I would like to thank you for that !" | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAH%2Fkk2iQAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
 | 2026-04-14 | Indranil Acharya (manager) | Thread | Re: Thank you Anurag for accelerating One Arm Qualification… | Backing Ashutosh's note on Anurag's One Arm QA work. | "Great work, Anurag! Your proactive approach and attention to detail have made a real difference in catching critical issues early and improving overall quality." | [Open](https://outlook.office365.com/owa/?ItemID=AQMkADJjMDMwOWViLTAzYzUtNDY3Mi04Njc4LTY1MDRkZjU4YTg3ZgBGAAADdFG0XaJzdkSk241Qh%2F8BVAcAu8CXs%2BW1Q0a3kvX79V0yDwAAAgEMAAAAu8CXs%2BW1Q0a3kvX79V0yDwAH%2Fkk22QAAAA%3D%3D&exvsurl=1&viewmodel=ReadMessageItem) |
@@ -58,11 +71,13 @@ To/CC: "To" or "CC" is shown where I confirmed it by reading the full message. "
 | Theme | Count | Emails |
 |---|---|---|
 | Customer escalation / demo support (Cisco OCP sync issue, hotfix qualification) | 8 | Razvan (~10-01, 10-07 x2), Abhijit, Ted Lau, Alok, Indranil, Ram |
-| Customer engagement / on-site demo (NSC AresONE eval) | 3 | Amritam (09-10, 09-22), Indranil (09-22) |
-| Release / feature QA and test reports (One Arm qualification, ITS FEC report) | 4 | Ashutosh, Indranil (04-14), Charles Seifert, Michelle Havard |
+| Customer engagement / demos (NSC AresONE eval, Credo INPT-1600 demo) | 5 | Amritam (09-10, 09-22), Indranil (09-22, 2025-12-02), Joe Wang (2025-12-02) |
+| Customer delivery milestone (first AresONE 1600GE units to Meta) | 2 | Alok (2025-12-07), Ram (2025-12-08) |
+| Release / feature QA and test reports (One Arm qualification, ITS FEC report, ITS-647 bug push) | 5 | Ashutosh, Indranil (04-14), Charles Seifert, Michelle Havard, Julio Marcos (2025-11-20) |
 | Customer interop quick checks (Meta: Molex 1.6T cable, Eoptolink 800G optics) | 2 | Salomon Varela, Avik Bhattacharya |
-| Lab / setup / debugging help for peers | 3 | Mihaela Jipa, Snehashish Samajpati, Razvan (htc-018) |
-| **Total** | **20** | |
+| Lab / setup / debugging help for peers | 5 | Mihaela Jipa, Snehashish Samajpati, Razvan (htc-018), Marie Wyszynski (2025-12-02, 2026-01-09) |
+| Overall performance (manager's year-end comment) | 1 | Indranil (2025-11-28, Value Creation Plan) |
+| **Total** | **28** | |
 
 ## Notes and exclusions
 
@@ -76,5 +91,11 @@ To/CC: "To" or "CC" is shown where I confirmed it by reading the full message. "
 - **Coverage gaps:**
   - No awards, spot awards or formal recognition emails turned up.
   - No praise sent directly from a customer domain (Meta, Broadcom, Cisco, NVIDIA) turned up.
-  - The search index leans heavily toward recent mail. Searches of Nov 2025 to Mar 2026 returned only transactional mail, so earlier appreciation may exist that these searches did not surface.
+  - The search index leans heavily toward recent mail. The first pass found nothing for Nov 2025 to Mar 2026. A second, month-by-month pass then covered that window and paged each query to the end. It used combined phrase queries ("thank you Anurag", "thanks Anurag for", "great job/work Anurag", "kudos", "appreciate", "well done", "quick turnaround", "extra mile" and similar), plus searches by sender for Indranil Acharya, Alok Srivastava and Ram Periakaruppan. It added the 8 Nov 2025 to Jan 2026 rows above and found nothing that qualified in Feb or Mar 2026.
+- **Not counted in the second pass:**
+  - Routine "Thanks a lot, Anurag." acknowledgements of test results or logs (Vinod Joseph, many times).
+  - One-line thanks for an update or for information: Yong Zhou (2025-12-22), Razvan Stan (2026-01-08), Ashutosh Kumar (2026-01-23), Mihaela Cornea (2026-02-20), Michelle Havard (2026-03-06, "for compiling the list"), Julio Marcos (2025-12-13, "for the feedback").
+  - Ashutosh Kumar's personal thank-you for a wedding gift (2026-03-07).
+  - Indranil's note sent with the 2026 compensation letter (2025-12-01). It is a pay document, so it is left out.
+  - Salomon Varela's "Thanks for the quick turnaround" (2026-02-27), which answered Limin Liu, not Anurag.
 - **Not added:** a few more replies on the 2026-10-07 Cisco thread (for example Daisy-Yuanwen Sun at 05:51 UTC). I did not read their own text, so they are left out rather than guessed.
