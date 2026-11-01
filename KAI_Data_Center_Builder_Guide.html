@@ -684,6 +684,11 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
       <td>Ping and port-check from the controller; confirm firmware is in the supported matrix</td>
     </tr>
     <tr>
+      <td>212G ports (1.6T-R8 / 800G-R4) won't link up without link training</td>
+      <td>In 26.6 (as in 26.5) APSU is <em>off</em> when ILT is off on 212G SerDes; it is always off on 106G (and future 53G) SerDes</td>
+      <td>Enable ILT on both ends to get APSU; otherwise tune the Tx/Rx settings by hand</td>
+    </tr>
+    <tr>
       <td>Ports down or at unexpected speed</td>
       <td>Optic/cable fault; FEC mismatch; forced speed on the DUT side</td>
       <td>Compare both ends' port config; swap the optic; read error counters</td>
@@ -738,6 +743,7 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
 <dl class="gloss">
   <dt>AllReduce</dt><dd>Collective where every rank contributes data and every rank receives the reduced result; the backbone of data-parallel gradient sync.</dd>
   <dt>All-to-All</dt><dd>Every rank sends distinct data to every other rank; dominant in Mixture-of-Experts routing and the harshest test of fabric load balancing.</dd>
+  <dt>APSU</dt><dd>Receiver auto-adaptation of SerDes settings. In 26.6 it is on only for 212G SerDes with ILT on; it is off for 212G without ILT and always off for 106G (and future 53G).</dd>
   <dt>Bus bandwidth</dt><dd>Normalized throughput measure for a collective that allows comparison across rank counts and algorithms.</dd>
   <dt>Collective</dt><dd>A communication primitive involving a group of ranks acting together, as opposed to point-to-point messaging.</dd>
   <dt>Compute gap</dt><dd>Emulated time a rank spends computing between collectives; what makes generated traffic resemble a real training rhythm.</dd>
@@ -746,6 +752,7 @@ python3 compare.py --baseline golden/ --candidate out/ --tolerance-pct 3</code><
   <dt>ECMP</dt><dd>Equal-cost multi-path routing; distributes flows across parallel uplinks, usually by hashing header fields.</dd>
   <dt>ECN</dt><dd>Explicit Congestion Notification; marks packets instead of dropping them so senders can slow down early.</dd>
   <dt>Incast</dt><dd>Many senders targeting one receiver simultaneously, overwhelming its buffers; a classic collective failure mode.</dd>
+  <dt>ILT</dt><dd>Initial link training: the two ends of a link negotiate SerDes Tx equalization at bring-up. On 212G SerDes, turning ILT on also turns APSU on.</dd>
   <dt>JCT</dt><dd>Job completion time — wall-clock duration of the emulated job; the primary outcome metric.</dd>
   <dt>PFC</dt><dd>Priority Flow Control; per-priority link-level pause used to build lossless Ethernet.</dd>
   <dt>QP</dt><dd>Queue pair — the RDMA connection endpoint abstraction; more QPs per rank means more entropy for ECMP hashing.</dd>
